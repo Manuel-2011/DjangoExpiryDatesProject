@@ -1,0 +1,46 @@
+{% extends 'expiry_dates/base.html' %}
+
+{% block title %}
+<title>ExpiDateApp-Historico</title>
+{% endblock %}
+
+{% block head %}
+<h1 class="display-1" style="font-size: 5rem;">Historico</h1>
+{% endblock %}
+
+{% block body %}
+
+<!-- Filter input -->
+<div class="container">
+    <div class="row">
+      <div class="col">
+        <!-- Filter input -->
+        <form method="POST" role="form" action="{% url 'filtro_historico' %}">
+        {% csrf_token %}
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Buscar</button>
+                </div>
+                {{ search_form.search_word }}
+            </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% for producto in productos %}
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ producto.nombre }}</h5>
+                    <small>{{ producto.fecha_creado }}</small>
+                </div>
+                <p class="mb-1">{{ producto.fecha_vencimiento }}</p>
+                <small>Eliminado en: {{ producto.fecha_salida|date:"F j, Y" }}</small>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

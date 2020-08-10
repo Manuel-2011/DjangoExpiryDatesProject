@@ -1,0 +1,81 @@
+{% extends 'expiry_dates/base.html' %}
+{% load humanize %}
+
+{% block title %}
+<title>ExpiDateApp-Inventario</title>
+{% endblock %}
+
+{% block head %}
+<h1 class="display-1" style="font-size: 5rem;">Inventario</h1>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AgregarProducto" style="margin-bottom: 1%;">
+         Agregar producto
+      </button>
+      <!-- Filter input -->
+      <form method="POST" role="form" action="{% url 'filtro_nombre' %}">
+        {% csrf_token %}
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Buscar</button>
+        </div>
+        {{ search_form.search_word }}
+      </div>
+      </form>
+      <!-- Modal -->
+      <div class="modal fade" id="AgregarProducto" tabindex="-1" role="dialog" aria-labelledby="Agregar_producto" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Agrega nuevo producto</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <form action="{% url 'inventario' %} " method="POST" role="form">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="nombre_producto" class="form-label">Nombre de producto</label>
+                {{ form.nombre }}
+              </div>
+              <div class="form-group">
+                <label for="fecha_venci" class="form-label">Fecha de vencimiento</label>
+                {{ form.fecha_vencimiento }}
+              </div>
+            </div>
+            <div class="modal-footer">
+              {{ form.errors }}
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Agregar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% for producto in productos %}
+
+<div class="container">
+    <div class="list-group">
+        <div class="list-group-item list-group-item-action">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ producto.nombre }}</h5>
+            <small>Creado:{{ producto.fecha_creado }}</small>
+          </div>
+          <p class="mb-1">{{ producto.fecha_vencimiento }}</p>
+          <small><a href="{% url 'producto_delete' producto.id %}"><i class="fas fa-trash"></i></a></small>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+{% endblock %}
