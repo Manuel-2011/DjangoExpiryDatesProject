@@ -3,15 +3,22 @@ from django import forms
 from .models import Producto
 from django.contrib.auth.forms import AuthenticationForm
 
+#custom widget to assign a date type input in the html tag
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class ProductoForm(ModelForm):
     class Meta:
         model = Producto
         fields = ('nombre', 'fecha_vencimiento')
+        widgets = {
+            'fecha_vencimiento': DateInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control', 'id': 'nombre_producto'})
-        self.fields['fecha_vencimiento'].widget.attrs.update({'class': 'form-control', 'id': 'fecha_venci', 'type': 'date', 'placeholder':'mm/dd/aaaa'})
+        self.fields['fecha_vencimiento'].widget.attrs.update({'class': 'form-control', 'id': 'fecha_venci'})
     
 class ExtendedAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
